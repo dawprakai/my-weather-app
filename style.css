@@ -1,35 +1,422 @@
+/* Import ฟอนต์ Orbitron จาก Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
+
+/* ตัวแปรสีธีมอวกาศ */
+:root {
+  --color-primary: #00ffff;
+  --color-secondary: #8a2be2;
+  --color-bg-gradient: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  --color-text: #e0e0e0;
+  --shadow-glow: 0 0 10px rgba(0, 255, 255, 0.7);
+  --input-bg: rgba(0, 0, 0, 0.3);
+  --input-bg-focus: rgba(0, 0, 0, 0.6);
+  --btn-bg-gradient: linear-gradient(135deg, #00ffff 0%, #8a2be2 100%);
+  --btn-shadow: 0 0 12px rgba(0, 255, 255, 0.6);
+}
+
+/* รีเซ็ตพื้นฐาน */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ตั้งค่าพื้นฐาน body */
 body {
-    background: #051923;
-    color: #E0E1DD;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  background: var(--color-bg-gradient);
+  color: var(--color-text);
+  min-height: 100vh;
+  padding: 20px;
+  background-image: url('https://images.unsplash.com/photo-1473929732300-8262f2f36ba1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
+  background-size: cover;
+  background-position: center;
+  text-shadow: var(--shadow-glow);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
-.app-container {
-    background: #003554;
-    padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    width: 90%;
-    max-width: 400px;
+
+/* กล่อง container กลางจอ */
+.container {
+  max-width: 450px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 25px;
+  padding: 30px;
+  box-shadow: 0 0 25px var(--color-primary);
+  animation: fadeIn 0.8s ease forwards;
+}
+
+/* ชื่อแอป */
+.title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-primary);
+  text-shadow:
+    0 0 10px var(--color-primary),
+    0 0 20px var(--color-primary),
+    0 0 30px var(--color-secondary);
+  margin-bottom: 20px;
+  animation: pulse 2s infinite;
+}
+
+/* กล่องค้นหา */
+.search-container {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+/* ห่อ input เพื่อใส่ไอคอน */
+.search-input-wrapper {
+  position: relative;
+  flex-grow: 1;
+}
+
+/* ไอคอนค้นหา */
+.search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-primary);
+  opacity: 0.7;
+  font-size: 18px;
+}
+
+/* ช่องกรอกข้อความ */
+.search-input {
+  width: 100%;
+  padding: 15px 15px 15px 45px;
+  font-size: 16px;
+  border-radius: 15px;
+  border: 1px solid rgba(0, 255, 255, 0.25);
+  background: var(--input-bg);
+  color: var(--color-primary);
+  outline: none;
+  backdrop-filter: blur(8px);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.search-input:focus {
+  background: var(--input-bg-focus);
+  box-shadow: 0 0 15px var(--color-primary);
+  transform: translateY(-2px);
+}
+
+/* ปุ่มค้นหา */
+.search-btn {
+  padding: 15px 28px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  background: var(--btn-bg-gradient);
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  box-shadow: var(--btn-shadow);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  min-width: 120px;
+}
+
+.search-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px var(--color-primary);
+}
+
+.search-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ข้อความแสดงข้อผิดพลาด */
+.error-message {
+  background: rgba(255, 0, 0, 0.15);
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  color: #ff8080;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  animation: shake 0.5s ease-in-out;
+  text-align: center;
+}
+
+/* การ์ดแสดงสภาพอากาศ */
+.weather-card, .forecast-card {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 25px;
+  padding: 30px 25px;
+  margin-bottom: 30px;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+  color: var(--color-text);
+  text-align: center;
+}
+
+/* แสงบางๆ รอบการ์ด */
+.weather-card::before,
+.forecast-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 255, 255, 0.05);
+  border-radius: 25px;
+  pointer-events: none;
+}
+
+/* ไอคอนขนาดใหญ่ */
+.weather-icon-large, .forecast-icon {
+  font-size: 4.2rem;
+  color: var(--color-primary);
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+  animation: float 3s ease-in-out infinite, glowPulse 2s ease-in-out infinite;
+  margin-bottom: 10px;
+}
+
+/* อุณหภูมิ */
+.temperature {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin: 15px 0;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: fadeIn 0.8s ease forwards 0.6s;
+}
+
+/* สภาพอากาศ */
+.condition {
+  font-size: 1.1rem;
+  opacity: 0.85;
+  margin-bottom: 25px;
+}
+
+/* รายละเอียดอากาศ (ลิสต์แบบ grid) */
+.weather-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 18px;
+  margin-top: 15px;
+}
+
+/* รายการรายละเอียดแต่ละช่อง */
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 12px 18px;
+  border: 1px solid rgba(0, 255, 255, 0.15);
+  animation: slideInUp 0.8s ease forwards;
+}
+
+.detail-icon {
+  font-size: 1.3rem;
+  color: var(--color-primary);
+  width: 24px;
+  text-align: center;
+}
+
+.detail-item div {
+  color: #b2ebf2;
+  font-weight: 500;
+}
+
+/* พยากรณ์อากาศล่วงหน้า */
+.forecast-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5 คอลัมน์ เท่า ๆ กัน */
+    gap: 16px;
+    /* ถ้าต้องการให้เลื่อนซ้ายขวาในมือถือ ให้เพิ่ม overflow-x */
+    overflow-x: auto;
+    padding-bottom: 10px; /* เว้นขอบล่างให้เวลาเลื่อน */
+    scrollbar-width: thin; /* สำหรับ Firefox */
+    -webkit-overflow-scrolling: touch; /* smooth scroll บน iOS */
+}
+
+/* รายการพยากรณ์แต่ละวัน */
+.forecast-item {
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+    padding: 14px;
+    border: 1px solid rgba(0, 255, 255, 0.12);
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
     text-align: center;
+    min-width: 90px; /* กำหนดความกว้างขั้นต่ำ ถ้าเลื่อนในมือถือ */
+  }
+
+  .forecast-item:hover {
+    background: rgba(255, 255, 255, 0.22);
+    color: #000;
+    transform: translateY(-3px);
+  }
+
+  /* ปรับให้เลื่อนซ้ายขวาในมือถือจริง ๆ */
+@media (max-width: 600px) {
+    .forecast-container {
+      grid-template-columns: unset;
+      display: flex;
+      gap: 12px;
+    }
+    .forecast-item {
+      flex: 0 0 90px; /* fix width item ในมือถือ */
+    }
 }
-h1 { color: #00A6FB; }
-#search-form { display: flex; gap: 0.5rem; margin: 1.5rem 0; }
-#city-input {
-    flex-grow: 1; padding: 0.75rem; border: 1px solid #006494;
-    border-radius: 0.5rem; background: #051923; color: #E0E1DD;
-    font-size: 1rem;
+
+/* Container ประวัติการค้นหา */
+.history-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 1rem 0 1.5rem;
+    padding: 12px 16px;
+    background: rgba(0, 255, 255, 0.12);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    border: 1.5px solid rgba(0, 255, 255, 0.3);
+    align-items: center;
+    max-height: 120px;  /* ถ้าค้นหามาก มีขอบเขตสูงสุด */
+    overflow-y: auto;   /* เลื่อนในกรณีเกินความสูง */
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+  }
+
+/* ปุ่ม tag แต่ละคำค้น */
+.tag {
+    padding: 8px 18px;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(0, 255, 255, 0.3), rgba(138, 43, 226, 0.2));
+    color: var(--color-primary);
+    border: 1px solid rgba(0, 255, 255, 0.4);
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+/* Hover และ active */
+.tag:hover {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: white;
+    box-shadow: 0 0 20px var(--color-primary);
+    transform: translateY(-2px);
+  }
+  
+  .tag.active {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: white;
+    box-shadow: 0 0 20px var(--color-primary);
+  }
+
+
+  /* ปุ่มกากบาทลบคำค้น (x) */
+.remove-btn {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 700;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    user-select: none;
+  }
+  
+  .remove-btn:hover {
+    color: #ff6b6b;
+  }
+  
+  /* ปุ่มล้างประวัติ */
+  .clear-history {
+    margin-left: auto; /* ดันปุ่มล้างไปทางขวา */
+    padding: 8px 16px;
+    background: transparent;
+    border: 1.5px solid rgba(0, 255, 255, 0.4);
+    border-radius: 20px;
+    font-weight: 600;
+    color: var(--color-primary);
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    user-select: none;
+    white-space: nowrap;
+  }
+  
+  .clear-history:hover {
+    background: var(--color-primary);
+    color: #000;
+    box-shadow: 0 0 20px var(--color-primary);
+  }
+  
+  /* ปรับ scrollbar ประวัติการค้นหา (ถ้ามี) */
+  .history-tags::-webkit-scrollbar {
+    height: 6px;
+  }
+  
+  .history-tags::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 255, 0.5);
+    border-radius: 3px;
+  }
+  
+  .history-tags::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+/* Animation keyframes */
+
+/* ลอยขึ้นลง */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
-#search-form button {
-    padding: 0.75rem 1rem; background-color: #00A6FB; color: #051923;
-    border: none; border-radius: 0.5rem; font-size: 1rem; font-weight: bold;
-    cursor: pointer; transition: background-color 0.2s;
+
+/* แสงเรือง pulse */
+@keyframes glowPulse {
+  0%, 100% { text-shadow: 0 0 8px rgba(0, 255, 255, 0.4); }
+  50% { text-shadow: 0 0 18px rgba(0, 255, 255, 0.8); }
 }
-#search-form button:hover { background-color: #0582CA; }
-.weather-info { margin-top: 1.5rem; min-height: 150px; }
-.weather-info .temp { font-size: 3rem; font-weight: bold; margin: 0.5rem 0; }
-.error { color: #ff4d4d; font-weight: bold; }
+
+/* fade in */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* pulse สีแสง */
+@keyframes pulse {
+  0%, 100% {
+    text-shadow: 0 0 10px var(--color-primary), 0 0 20px var(--color-primary);
+  }
+  50% {
+    text-shadow: 0 0 15px var(--color-primary), 0 0 30px var(--color-secondary);
+  }
+}
+
+/* สั่น (error) */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  50% { transform: translateX(8px); }
+  75% { transform: translateX(-8px); }
+}
+
+/* slide ขึ้น */
+@keyframes slideInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
